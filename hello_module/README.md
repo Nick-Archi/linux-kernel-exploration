@@ -18,6 +18,7 @@ A "Hello World" kernel module to get me familiar with:
 
 ## Building
     ```
+    $ make clean
     $ make
     ```
 
