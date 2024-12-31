@@ -1,0 +1,9 @@
+#ignore these files
+*.cmd
+*.ko
+*.mod
+*.mod.c
+*.o
+*order
+*.swp
+*symvers
