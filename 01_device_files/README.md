@@ -8,34 +8,32 @@
 [Executing](#executing)<br>
 [References](#references)<br>
 
-## Introduction
-Devices are connected to the Linux Kernel at /dev. To interact with these devices, a kernel module is usually loaded.
+## Overview
+Device files are connected to the Linux Kernel at /dev. To interact with these device files, a kernel module needs to be created, loaded, & registered.
 
-```
-Snippet Call:
-
-$ ls /dev/
-autofs         input         ram1    tty13  tty39  tty7       vcsm-cma
-block          kmsg          ram10   tty14  tty4   tty8       vcsu
-```
-
-So what if you had a theoretical device and you wanted to interface with? How would this be achieved? You would have to essentially create a kernel module and register this so that user applications can have an interface.
-
+Afterwards, a user application can interface with the device file that will exist at /dev/<device_file_name>. 
 
 ```
 Rough Illustration:
----------------          --------------          ---------------
-|  theor. HW  |   <->    |  dev_file  |   <->    |   user_app  |   
----------------          --------------          ---------------
+---------------
+|  user app   |   
+---------------
+|  dev file   |
+---------------
+|  .ko file   |
+---------------
+|     HW      |
+---------------
 ```
 
 ---
 
-## Objective
+## Objective(s)
 - create a kernel module and register this with the kernel
 - create a sample user space application that will interface with the .ko 
 
 ## Prereqs
+- Building on learnings from 00 
 - Everything should already be installed on your Linux machine (make, insmod, rmmod)...but just in case
 
 ```
@@ -83,6 +81,7 @@ sudo apt install -y build-essential
     ```
     $ gcc <user_c_file> -c <executable_name>
     ex) gcc test.c -c test
+    $ ./<executable_name>
     ```
 
     - Remove Device File from /dev

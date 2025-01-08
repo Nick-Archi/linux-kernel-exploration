@@ -1,3 +1,4 @@
+# this is the name of target object file
 obj-m += mymodule.o
 
 #execute the makefile for the corresponding kernel

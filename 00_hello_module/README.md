@@ -14,7 +14,22 @@ A "Hello World" kernel module to get me familiar with:
 [References](#references)<br>
 
 ## Prereqs
-- Everything should already be installed on your Linux machine (make, insmod, rmmod)
+- Everything should already be installed on your Linux machine (make, insmod, rmmod)...but just in case
+
+```
+Find out Kernel Version:
+$ uname -r
+
+Update Packages:
+$ sudo apt update && sudo apt upgrade -y
+
+Install Kernel Headers:
+$ sudo apt install -y raspberrypi-kernel-headers
+
+Install Build Tools:
+sudo apt install -y build-essential
+
+```
 
 ## Building
     ```
