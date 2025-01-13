@@ -80,7 +80,7 @@ sudo apt install -y build-essential
     - Build & Execute Sample User Space Application
     ```
     $ gcc <user_c_file> -c <executable_name>
-    ex) gcc test.c -c test
+    ex) gcc -o test test.c # executable also built during 'make'
     $ ./<executable_name>
     ```
 
