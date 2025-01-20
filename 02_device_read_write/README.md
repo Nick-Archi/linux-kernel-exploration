@@ -65,6 +65,7 @@ sudo apt install -y build-essential
 
     - Writing & reading from device file
     ```
+    $ sudo chmod 666 /dev/<device-file-name>
     $ echo "<TEXT>" > /dev/<device-file-name>
     $ tail -n 1 /dev/<device-file-name>
     ```
