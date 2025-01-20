@@ -11,8 +11,9 @@
 ## Introduction
 In this example, I build upon the 01 module from before and add some new functionality to the kernel module to:
 - transfer data between the kernel space and user space 
-- auto mate obtaining a major and minor number
-- register and create the device file
+- automate obtaining a major and minor number & registering under /proc/devices
+- register and create the device file in /sys/class & /dev/
+- tie defined driver functionality to device number
 - properly destroy and unregister device file upon destruction/closing
 
 ---

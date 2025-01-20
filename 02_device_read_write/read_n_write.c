@@ -24,7 +24,7 @@ MODULE_DESCRIPTION("Registers a device number and implements some callback funct
 // Buffer data for device file
 #define BUFFER_SIZE 256
 static unsigned char buffer[BUFFER_SIZE];
-static unsigned int p_buffer;
+static unsigned int p_buffer; // track size of kernel buffer
 
 // Variables for device & device class
 static dev_t my_device_nr; // device number
@@ -61,8 +61,8 @@ static ssize_t driver_read(struct file* pfile, char* input, size_t request, loff
  * @brief Handler function for writing data to the dev buffer
  *
  * @param pfile Pointer to file struct for kernel module
- * @param input Pointer to constant input buffer from caller containing data to write from user to kernel 
- * @param request number of bytes to write from device file
+ * @param input Pointer to buffer from caller containing data to write from user to kernel 
+ * @param request number of bytes to write to device file
  * @param offs 
  *
  * @return number of bytes copied to kernel buffer
@@ -128,7 +128,7 @@ static int __init ModuleInit(void)
 {
 	printk(KERN_INFO "Attempting to register device...\n");
 
-    // allocate free device number
+    // allocate free device number and register in /proc/devices
     if(alloc_chrdev_region(&my_device_nr, 0, 1, DEVICE_FILE_NAME) < 0)
     {
         printk(KERN_ALERT "Device Number couldn't be allocated\n");
@@ -138,24 +138,26 @@ static int __init ModuleInit(void)
     printk(KERN_INFO "%s - Device Number: %d, Minor %d was registered\n",
             DEVICE_FILE_NAME, MAJOR(my_device_nr), MINOR(my_device_nr));
 
-    // create virtual device class
+    // create device class struct at /sys/class/
     if ((my_class = class_create(DRIVER_CLASS)) == NULL)
     {
         printk(KERN_ALERT "Device class %s cannot be created\n", DRIVER_CLASS);
         goto classError;
     }
 
-    // create device file
+    // create device file (/dev/) & register device with class (add sub-dir)
     if(device_create(my_class, NULL, my_device_nr, NULL, DEVICE_FILE_NAME)== NULL)
     {
         printk(KERN_ALERT "Cannot create device file: %s\n", DEVICE_FILE_NAME);
         goto fileError;
     }
 
-    // initialize device file
+    // initialize device file & tie driver functionality
     cdev_init(&my_device, &fops);
 
-    // intialize device file in /sys/class/
+    /* Essentially, this block is tying the device driver callbacks
+     * with the device number that has been allocated
+     */
     if(cdev_add(&my_device, my_device_nr, 1) == -1)
     {
         printk(KERN_ALERT "Registering of device %s, to kernel failed", DEVICE_FILE_NAME);
